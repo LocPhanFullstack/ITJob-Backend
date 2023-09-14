@@ -45,6 +45,12 @@ export class ResumesService {
         };
     }
 
+    async findByUsers(user: IUser) {
+        return await this.resumeModel.find({
+            userId: user._id,
+        });
+    }
+
     async findAll(currentPage: number, limit: number, qs: string) {
         const { filter, sort, population } = aqp(qs);
         delete filter.current;
