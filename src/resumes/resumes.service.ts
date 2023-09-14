@@ -70,6 +70,16 @@ export class ResumesService {
             .populate(population)
             .select(projection as any)
             .exec();
+
+        return {
+            meta: {
+                current: currentPage,
+                pageSize: limit,
+                pages: totalPages,
+                total: totalItems,
+            },
+            result,
+        };
     }
 
     async findOne(id: string) {

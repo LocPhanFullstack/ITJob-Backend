@@ -22,7 +22,7 @@ export class ResumesController {
     }
 
     @Get()
-    @ResponseMessage('Fetch all resumes with paginate')
+    @ResponseMessage('Fetch resumes with pagination')
     findAll(
         @Query('current') currentPage: string,
         @Query('pageSize') limit: string,
