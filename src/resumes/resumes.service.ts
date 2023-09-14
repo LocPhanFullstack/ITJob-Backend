@@ -76,7 +76,6 @@ export class ResumesService {
         if (!mongoose.Types.ObjectId.isValid(_id)) {
             throw new BadRequestException('not found resume');
         }
-        4444;
 
         const updated = await this.resumeModel.updateOne(
             {
