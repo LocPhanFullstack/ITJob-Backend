@@ -1,3 +1,5 @@
+import { Company } from '@/companies/schemas/company.schema';
+import { Job } from '@/jobs/schemas/job.schema';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 
@@ -17,11 +19,11 @@ export class Resume {
     @Prop()
     status: string;
 
-    @Prop()
-    companyId: string;
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Company.name })
+    companyId: mongoose.Schema.Types.ObjectId;
 
-    @Prop()
-    jobId: string;
+    @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Job.name })
+    jobId: mongoose.Schema.Types.ObjectId;
 
     @Prop({ type: mongoose.Schema.Types.Array })
     history: {
