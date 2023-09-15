@@ -35,9 +35,6 @@ export class Resume {
         };
     }[];
 
-    @Prop()
-    createdAt: Date;
-
     @Prop({ type: Object })
     createdBy: {
         _id: mongoose.Schema.Types.ObjectId;
@@ -55,6 +52,9 @@ export class Resume {
         _id: mongoose.Schema.Types.ObjectId;
         email: string;
     };
+
+    @Prop()
+    createdAt: Date;
 
     @Prop()
     updatedAt: Date;
