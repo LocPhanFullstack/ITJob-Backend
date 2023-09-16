@@ -63,9 +63,11 @@ export class UsersService {
     // }
 
     async findOneByUsername(username: string) {
-        return this.userModel.findOne({
-            email: username,
-        });
+        return this.userModel
+            .findOne({
+                email: username,
+            })
+            .populate({ path: 'role', select: { name: 1, permissions: 1 } });
     }
 
     async findByEmail(email: string) {
@@ -150,6 +152,11 @@ export class UsersService {
             return 'Not found user';
         }
 
+        const foundUser = await this.userModel.findById(id);
+        if (foundUser.email === process.env.ADMIN_ACCOUNT) {
+            throw new BadRequestException("Can't delete a admin account!!!");
+        }
+
         await this.userModel.updateOne(
             {
                 _id: id,
@@ -173,7 +180,8 @@ export class UsersService {
             .findOne({
                 _id: id,
             })
-            .select('-password');
+            .select('-password')
+            .populate({ path: 'role', select: { name: 1, _id: 1 } });
     }
 
     async findAll(currentPage: number, limit: number, qs: string) {
