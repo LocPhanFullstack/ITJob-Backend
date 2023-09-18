@@ -1,3 +1,4 @@
+import { RolesService } from '@/roles/roles.service';
 import { RegisterUserDto } from '@/users/dto/create-user.dto';
 import { IUser } from '@/users/user.interface';
 import { UsersService } from '@/users/users.service';
@@ -14,6 +15,7 @@ export class AuthService {
         private usersService: UsersService,
         private jwtService: JwtService,
         private configService: ConfigService,
+        private roleService: RolesService,
     ) {}
 
     async validateUser(username: string, password: string): Promise<any> {
@@ -21,14 +23,22 @@ export class AuthService {
         if (user) {
             const isValid = this.usersService.isValidPassword(password, user.password);
             if (isValid === true) {
-                return user;
+                const userRole = user.role as unknown as { _id: string; name: string };
+                const temp = await this.roleService.findOne(userRole._id);
+
+                const objUser = {
+                    ...user.toObject(),
+                    permissions: temp?.permissions ?? [],
+                };
+
+                return objUser;
             }
         }
         return null;
     }
 
     async login(user: IUser, response: Response) {
-        const { _id, name, email, role } = user;
+        const { _id, name, email, role, permissions } = user;
         const payload = {
             sub: 'token login',
             iss: 'from server',
@@ -56,6 +66,7 @@ export class AuthService {
                 name,
                 email,
                 role,
+                permissions,
             },
         };
     }
@@ -99,6 +110,10 @@ export class AuthService {
                 // update user with refresh token
                 await this.usersService.updateUserToken(refresh_token, _id.toString());
 
+                // fetch user's role
+                const userRole = user.role as unknown as { _id: string; name: string };
+                const temp = await this.roleService.findOne(userRole._id);
+
                 // set refresh_token as cookies
                 response.clearCookie('refresh_token');
 
@@ -114,6 +129,7 @@ export class AuthService {
                         name,
                         email,
                         role,
+                        permissions: temp?.permissions ?? [],
                     },
                 };
             } else {

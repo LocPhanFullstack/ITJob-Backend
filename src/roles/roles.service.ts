@@ -7,6 +7,7 @@ import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { IUser } from '@/users/user.interface';
 import aqp from 'api-query-params';
 import mongoose from 'mongoose';
+import { ADMIN_ROLE } from '@/databases/sample';
 
 @Injectable()
 export class RolesService {
@@ -110,7 +111,7 @@ export class RolesService {
 
     async remove(id: string, user: IUser) {
         const foundRole = await this.roleModel.findById(id);
-        if (foundRole.name === 'ADMIN') {
+        if (foundRole.name === ADMIN_ROLE) {
             throw new BadRequestException("Can't delete this role");
         }
 

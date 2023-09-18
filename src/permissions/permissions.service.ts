@@ -43,7 +43,7 @@ export class PermissionsService {
     }
 
     async findAll(currentPage: number, limit: number, qs: string) {
-        const { filter, sort, population, projection } = aqp(qs);
+        const { filter, sort, population } = aqp(qs);
         delete filter.current;
         delete filter.pageSize;
 
@@ -59,7 +59,6 @@ export class PermissionsService {
             .limit(defaultLimit)
             .sort(sort as any)
             .populate(population)
-            .select(projection as any)
             .exec();
 
         return {
@@ -69,6 +68,7 @@ export class PermissionsService {
                 pages: totalPages,
                 total: totalItems,
             },
+            result,
         };
     }
 
@@ -94,10 +94,10 @@ export class PermissionsService {
         return updated;
     }
 
-    async remove(id: string, user: IUser) {
+    async remove(_id: string, user: IUser) {
         await this.permissionModel.updateOne(
             {
-                _id: id,
+                _id,
             },
             {
                 deletedBy: {
@@ -107,7 +107,7 @@ export class PermissionsService {
             },
         );
         return this.permissionModel.softDelete({
-            _id: id,
+            _id,
         });
     }
 }

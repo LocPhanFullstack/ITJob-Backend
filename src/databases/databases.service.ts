@@ -46,13 +46,13 @@ export class DatabasesService implements OnModuleInit {
                         name: ADMIN_ROLE,
                         description: 'Admin thì full quyền :v',
                         isActive: true,
-                        permisssions: permissions,
+                        permissions: permissions,
                     },
                     {
                         name: USER_ROLE,
                         description: 'Người dùng/ứng viên sử dụng hệ thống',
                         isActive: true,
-                        permisssions: [], // không set quyền, chỉ cần add role
+                        permissions: [], // không set quyền, chỉ cần add role
                     },
                 ]);
             }
