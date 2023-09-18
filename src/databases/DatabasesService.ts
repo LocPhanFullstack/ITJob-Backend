@@ -2,7 +2,7 @@ import { Permission, PermissionDocument } from '@/permissions/schemas/permission
 import { Role, RoleDocument } from '@/roles/schemas/role.schema';
 import { User, UserDocument } from '@/users/schemas/user.schema';
 import { UsersService } from '@/users/users.service';
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
@@ -10,8 +10,6 @@ import { ADMIN_ROLE, INIT_PERMISSIONS, USER_ROLE } from './sample';
 
 @Injectable()
 export class DatabasesService implements OnModuleInit {
-    private readonly logger = new Logger(DatabasesService.name);
-
     constructor(
         @InjectModel(User.name)
         private userModel: SoftDeleteModel<UserDocument>,
@@ -85,7 +83,7 @@ export class DatabasesService implements OnModuleInit {
                     },
                     {
                         name: "I'm normal user",
-                        email: 'user@gmail.com',
+                        email: 'user @gmail.com',
                         password: this.userService.getHashPassword(
                             this.configService.get<string>('INIT_PASSWORD'),
                         ),
@@ -98,8 +96,7 @@ export class DatabasesService implements OnModuleInit {
             }
 
             if (countUser > 0 && countRole > 0 && countPermission > 0) {
-                // console.log(">>>>>ALREDY INIT SAMPLE DATA....")
-                this.logger.log('>>>>>ALREDY INIT SAMPLE DATA....');
+                // console.log("")
             }
         }
     }
