@@ -162,7 +162,7 @@ export class UsersService {
         }
 
         const foundUser = await this.userModel.findById(id);
-        if (foundUser.email === process.env.ADMIN_ACCOUNT) {
+        if (foundUser && foundUser.email === process.env.ADMIN_ACCOUNT) {
             throw new BadRequestException("Can't delete a admin account!!!");
         }
 
