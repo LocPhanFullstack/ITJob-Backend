@@ -15,8 +15,8 @@ export class SubscribersService {
         private subscriberModel: SoftDeleteModel<SubscriberDocument>,
     ) {}
 
-    async create(createPermissionDto: CreateSubscriberDto, user: IUser) {
-        const { name, email, skills } = createPermissionDto;
+    async create(createSubscriberDto: CreateSubscriberDto, user: IUser) {
+        const { name, email, skills } = createSubscriberDto;
 
         const isExist = await this.subscriberModel.findOne({ email });
         if (isExist) {
