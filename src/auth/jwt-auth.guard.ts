@@ -1,4 +1,4 @@
-import { IS_PUBLIC_KEY } from '@/decorator/customize';
+import { IS_PUBLIC_KEY, IS_PUBLIC_PERMISSION } from '@/decorator/customize';
 import {
     ExecutionContext,
     ForbiddenException,
@@ -28,7 +28,12 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
 
     handleRequest(err, user, info, context: ExecutionContext) {
         const request: Request = context.switchToHttp().getRequest();
-        // You can throw an exception based on either "info" or "err" arguments
+
+        const isSkipPermission = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_PERMISSION, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+
         if (err || !user) {
             throw (
                 err ||
@@ -47,7 +52,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
                 targetMethod === permission.method && targetEndpoint === permission.apiPath,
         );
         if (targetEndpoint.startsWith('/api/v1/auth')) isExist = true;
-        if (!isExist) {
+        if (!isExist && !isSkipPermission) {
             throw new ForbiddenException("You don't have a permission to access this endpoint!!!");
         }
 

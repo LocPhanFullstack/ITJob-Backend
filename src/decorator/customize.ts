@@ -10,3 +10,6 @@ export const UserDecorator = createParamDecorator((data: unknown, ctx: Execution
     const request = ctx.switchToHttp().getRequest();
     return request.user;
 });
+
+export const IS_PUBLIC_PERMISSION = 'isPublicPermission';
+export const SkipCheckPermission = () => SetMetadata(IS_PUBLIC_PERMISSION, true);
