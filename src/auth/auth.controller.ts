@@ -7,8 +7,10 @@ import { Request, Response } from 'express';
 import { IUser } from '@/users/user.interface';
 import { RolesService } from '@/roles/roles.service';
 import { ThrottlerGuard } from '@nestjs/throttler';
+import { ApiTags } from '@nestjs/swagger';
 // import { AuthenticatedGuard } from './stateful/passport/stateful.local.authenticated.guard';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService, private roleService: RolesService) {}

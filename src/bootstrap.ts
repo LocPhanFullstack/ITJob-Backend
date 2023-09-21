@@ -8,9 +8,8 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { TransformInterceptor } from './core/transform.interceptor';
 import helmet from 'helmet';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-async function bootstrap() {
+export async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const configService = app.get(ConfigService);
 
@@ -52,16 +51,5 @@ async function bootstrap() {
     // config helmet
     app.use(helmet());
 
-    // config swagger
-    const config = new DocumentBuilder()
-        .setTitle('NestJS APIs Document')
-        .setDescription('All Modules APIs')
-        .setVersion('1.0')
-        // .addTag('')
-        .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
-
     await app.listen(port);
 }
-bootstrap();
