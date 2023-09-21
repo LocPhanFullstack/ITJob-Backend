@@ -4,13 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
-import session from 'express-session';
-import MongoStore from 'connect-mongo';
-import ms from 'ms';
-import passport from 'passport';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { TransformInterceptor } from './core/transform.interceptor';
+import helmet from 'helmet';
 
 async function bootstrap() {
     const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -50,6 +47,8 @@ async function bootstrap() {
         type: VersioningType.URI,
         defaultVersion: ['1', '2'],
     });
+
+    app.use(helmet());
 
     await app.listen(port);
 }

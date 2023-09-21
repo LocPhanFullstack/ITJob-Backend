@@ -3,9 +3,10 @@ import { Body, Controller, Req, Post, Res, UseGuards, Get } from '@nestjs/common
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local.auth.guard';
 import { RegisterUserDto } from '@/users/dto/create-user.dto';
-import { Request, Response, response } from 'express';
+import { Request, Response } from 'express';
 import { IUser } from '@/users/user.interface';
 import { RolesService } from '@/roles/roles.service';
+import { ThrottlerGuard } from '@nestjs/throttler';
 // import { AuthenticatedGuard } from './stateful/passport/stateful.local.authenticated.guard';
 
 @Controller('auth')
@@ -14,6 +15,7 @@ export class AuthController {
 
     @Public()
     @UseGuards(LocalAuthGuard)
+    @UseGuards(ThrottlerGuard)
     @ResponseMessage('user login')
     @Post('/login')
     handleLogin(@Req() req, @Res({ passthrough: true }) response: Response) {
